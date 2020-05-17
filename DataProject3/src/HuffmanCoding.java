@@ -10,12 +10,18 @@ import ciic4020.hashtable.*;
 public class HuffmanCoding<K, V> {
 	
 	public static void main (String[] args) throws FileNotFoundException {
+	
 		
-		File file = new File("C:\\Users\\pankaj\\Desktop\\test.txt");
-		load_data(file);
+		File file = new File("C:\\Users\\sirsh\\git\\DataProject3\\DataProject3\\stringData.txt");
+		String load = load_data(file);
+		
+		//HashTableSC<Integer, String> fd = compute_fd(load);
+		//HashTableSC<Integer, String> code = huffman_code(huffman_tree(fd));
+		//String output = encode(code, load);
+		//process_results(fd, code, load, output);
 		
 	}
-	
+	//Receives the string to be encoded
 	public static String load_data(File file) throws FileNotFoundException {
 			    Scanner sc = new Scanner(file); 
 			  
@@ -23,7 +29,7 @@ public class HuffmanCoding<K, V> {
 			     return sc.nextLine();
 				return null;
 	}
-	
+	//Computes the frequency of a character in the string
 	public HashTableSC<Integer,String> compute_fd(String string){
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -59,12 +65,40 @@ public class HuffmanCoding<K, V> {
 	
 		return minFreqRemove(SL);
 	}
+	//Attaches a string along to its code in a map
+	public HashTableSC<Integer,String> huffman_code(BTNode<Integer, String> root){
+		HashTableSC<Integer,String> appendix = new HashTableSC<Integer,String>(11, new SimpleHashFunction<Integer>());
+	
+		if(root==null) return appendix;
+		
+		else {
+		huffman_code(root.getRightChild());
+		huffman_code(root.getLeftChild());
+		appendix.put(root.getKey(), seek(root, root.getValue()));
+		}
+		return appendix;
+	}
+	//Traverses through huffman tree to get the code of the selected string
+	public String seek(BTNode<Integer, String> root, String string) {
+		
+		String word="";
+		if(root.getLeftChild().getValue().equals(string)) return word+0;
+		
+		if(root.getValue().equals(string)) return word;
+		
+		else {seek(root.getRightChild(), string);
+		word = word+"1";
+		}
+		
+		return word;
+	}
 	
 	public String encode(HashTableSC<Integer,String> map, String input) {
 		
-		
-		return null;
+		return input;
 	}
+	
+	
 	
 	public void process_results(Map<K,V> fd, Map<K,V> code, String input, String output) {
 		
@@ -73,12 +107,15 @@ public class HuffmanCoding<K, V> {
 	public BTNode<Integer,String> minFreqRemove(SortedList<BTNode<Integer,String>> SL){
 		
 		BTNode<Integer,String> min = null;
-		
+		if(!SL.isEmpty()) {
 		for (int i = 0; i < SL.size(); i++) {
 			if(min.compareTo(SL.get(i))>0) {
 				min = SL.get(i);
+				SL.remove(min);
 			}
 		}
 		return min;
+		}
+		else return null;
 	}
 }
