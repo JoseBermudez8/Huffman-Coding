@@ -67,16 +67,9 @@ public class BTNode<K extends Comparable<K>, V extends Comparable<V>> implements
 	@Override
 	public int compareTo(BTNode<K, V> key) {
 		// TODO Auto-generated method stub
-		 int result=0;
-	        if(this.getKey().compareTo(key.getKey())>0)
-	        {
-	            result=1;
-	        }else if(this.getKey().compareTo(key.getKey())<0){
-	            result=-1;
-	        }else if(this.getKey()==key)
-	        {
-	            result=0;
-	        }
-	        return result;
+		if(getKey().compareTo(key.getKey()) == 0){
+			return getValue().compareTo(key.getValue());
+		}
+		return getKey().compareTo(key.getKey());
 	}
 }
